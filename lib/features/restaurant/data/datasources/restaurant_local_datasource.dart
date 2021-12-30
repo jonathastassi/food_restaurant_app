@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:food_restaurant_app/core/database/local_database.dart';
 import 'package:food_restaurant_app/core/errors/exceptions.dart';
 import 'package:food_restaurant_app/features/restaurant/data/models/restaurant_model.dart';
@@ -21,10 +23,17 @@ class RestaurantLocalDatasourceImpl implements RestaurantLocalDatasource {
     try {
       final restaurantsMap = await _localDatabase.getAll(tableName);
 
-      final List<RestaurantModel> restaurants = restaurantsMap
-          .map((restaurantMap) => RestaurantModel.fromJson(restaurantMap))
-          .toList();
-          
+      final List<RestaurantModel> restaurants = restaurantsMap.map(
+        (restaurantMap) {
+          final model = {
+            ...restaurantMap,
+            'hours': json.decode(restaurantMap['hours'])
+          };
+
+          return RestaurantModel.fromJson(model);
+        },
+      ).toList();
+
       return restaurants;
     } catch (_) {
       throw CacheException();

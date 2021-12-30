@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:food_restaurant_app/features/restaurant/data/models/restaurant_hour_model.dart';
 import 'package:food_restaurant_app/features/restaurant/domain/entities/restaurant_entity.dart';
 
@@ -34,7 +36,17 @@ class RestaurantModel extends RestaurantEntity {
     data['id'] = id;
     data['name'] = name;
     data['address'] = address;
-    data['hours'] = null;
+    data['hours'] = json.encode(
+      hours
+          .map(
+            (hour) => RestaurantHourModel(
+              to: hour.to,
+              from: hour.from,
+              days: hour.days,
+            ).toJson(),
+          )
+          .toList(),
+    );
     data['image'] = image;
     return data;
   }
