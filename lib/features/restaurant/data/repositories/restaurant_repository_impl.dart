@@ -18,11 +18,10 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
 
   @override
   Future<Either<Failure, List<RestaurantEntity>>> getAllRestaurants() async {
-    if (1 == 11) {
+    if (1 == 1) {
       try {
         final List<RestaurantModel> restaurants =
             await restaurantRemoteDatasource.getAllRestaurants();
-
         restaurantLocalDatasource.cacheRestaurants(restaurants);
 
         return Right(restaurants);

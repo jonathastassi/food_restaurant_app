@@ -4,7 +4,19 @@ import 'package:sqflite/sqflite.dart';
 const String databaseName = 'restaurants_cache.db';
 
 class DatabaseHelper {
-  static Future<Database> startDatabase() async {
+  DatabaseHelper._();
+
+  static final DatabaseHelper instance = DatabaseHelper._();
+
+  static Database? _database;
+
+  Database? get database => _database;
+
+  static Future<void> initializeDatabase() async {
+    _database = await _startDatabase();
+  }
+
+  static Future<Database> _startDatabase() async {
     final database = await openDatabase(
         join(await getDatabasesPath(), databaseName),
         version: 1, onCreate: (Database db, int version) async {
